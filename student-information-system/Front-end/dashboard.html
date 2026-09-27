@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — M&E Lights and Sounds</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .page-wrap { padding: 40px 0 80px; }
+  .booking-list { padding: 8px; }
+  .booking-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 18px 12px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .booking-row:last-child { border-bottom: none; }
+  .date-badge {
+    width: 56px; height: 56px; border-radius: var(--radius-md);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; flex-shrink: 0;
+  }
+  .date-badge .day { font-size: 20px; font-weight: 800; line-height: 1; }
+  .date-badge .mon { font-size: 10px; text-transform: uppercase; opacity: .85; }
+  .booking-info { flex: 1; min-width: 0; }
+  .booking-info h4 { margin: 0 0 4px; font-size: 15px; }
+  .booking-info p { margin: 0; font-size: 13px; color: var(--text-muted); }
+  .booking-side { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+  .booking-price { font-weight: 700; font-size: 14px; }
+
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal-overlay.is-open { display: flex; }
+  .modal-box { width: 100%; max-width: 340px; padding: 28px; text-align: center; }
+  .modal-box p { margin: 0 0 24px; font-size: 14px; }
+  .modal-actions { display: flex; gap: 12px; justify-content: center; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <div class="brand-mark">M&E</div>
+      <div class="brand-name">M&E Lights <span>And Sounds</span></div>
+    </div>
+    <nav class="site-nav">
+      <ul>
+        <li><a href="index.html">Book</a></li>
+        <li><a href="dashboard.html">My bookings</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="index.html">+ New booking</a>
+    </div>
+  </div>
+</header>
+
+<div class="container page-wrap">
+  <span class="eyebrow">Dashboard</span>
+  <h1 style="margin:0 0 24px; font-size:26px;">Bookings overview</h1>
+
+  <div class="card">
+    <div style="padding:20px 20px 4px;">
+      <h3 style="margin:0 0 2px; font-size:17px;">Upcoming booking</h3>
+      <p class="text-muted" style="margin:0; font-size:13px;">Call sheet for the next 7 days</p>
+    </div>
+
+    <div class="booking-list">
+      <div class="booking-row">
+        <div class="date-badge" style="background: var(--gradient-primary);">
+          <span class="day">31</span><span class="mon">Aug</span>
+        </div>
+        <div class="booking-info">
+          <h4>Dela Cruz Birthday</h4>
+          <p>Class A · Grandview Hall · Load-in 3:00 PM</p>
+        </div>
+        <div class="booking-side">
+          <span class="pill pill-pending">Pending</span>
+          <span class="booking-price">₱8,000</span>
+          <button class="btn btn-danger-outline btn-sm" onclick="openConfirmModal('Dela Cruz Birthday')">Cancel</button>
+        </div>
+      </div>
+
+      <div class="booking-row">
+        <div class="date-badge" style="background: linear-gradient(115deg, #7c3aed, #a855f7);">
+          <span class="day">24</span><span class="mon">Aug</span>
+        </div>
+        <div class="booking-info">
+          <h4>Reyes-Santos Wedding</h4>
+          <p>Basic · Villa Del Sol · Load-in 5:30 PM</p>
+        </div>
+        <div class="booking-side">
+          <span class="pill pill-finished">Finish</span>
+          <span class="booking-price">₱3,500</span>
+        </div>
+      </div>
+
+      <div class="booking-row">
+        <div class="date-badge" style="background: linear-gradient(115deg, #f5a623, #f59e0b);">
+          <span class="day">15</span><span class="mon">Aug</span>
+        </div>
+        <div class="booking-info">
+          <h4>Ramos Family Reunion</h4>
+          <p>Class B · Barangay Hall</p>
+        </div>
+        <div class="booking-side">
+          <span class="pill pill-finished">Finish</span>
+          <span class="booking-price">₱6,000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirm-modal">
+  <div class="card modal-box">
+    <p id="confirm-modal-text">Are you sure you want to cancel it?</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary btn-sm" style="background:#dc2626;" onclick="closeConfirmModal()">Confirm</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeConfirmModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
