@@ -1,121 +1,208 @@
-/* ==========================================================================
-   M&E Lights and Sounds — Shared Behaviors
-   ========================================================================== */
-
-/* ---------- Booking flow (index.html) ---------- */
-const tierData = {
-  basic: { name: 'Basic', price: 3500 },
-  classb: { name: 'Class B', price: 6000 },
-  classa: { name: 'Class A', price: 8000 },
+// Listahan ng mga package/tier at presyo nila
+var tierNames = {
+  basic: "Basic",
+  classb: "Class B",
+  classa: "Class A"
 };
-
-const addonData = {
-  projector: { name: 'Projector with white screen', price: 1000 },
-  moving: { name: 'Moving head (pair)', price: 500 },
-  smoke: { name: 'Smoke machine', price: 1000 },
-  bubble: { name: 'Bubble machine', price: 500 },
-  mic: { name: 'Additional microphone', price: 500 },
-  lights: { name: 'Additional lights', price: 100 },
+ 
+var tierPrices = {
+  basic: 3500,
+  classb: 6000,
+  classa: 8000
 };
-
-let selectedTier = null;
-let selectedAddons = new Set();
-let selectedDate = null;
-
+ 
+// Listahan ng mga add-ons at presyo nila
+var addonNames = {
+  projector: "Projector with white screen",
+  moving: "Moving head (pair)",
+  smoke: "Smoke machine",
+  bubble: "Bubble machine",
+  mic: "Additional microphone",
+  lights: "Additional lights"
+};
+ 
+var addonPrices = {
+  projector: 1000,
+  moving: 500,
+  smoke: 1000,
+  bubble: 500,
+  mic: 500,
+  lights: 100
+};
+ 
+// Dito naka-save yung mga napili ng user
+var selectedTier = null;
+var selectedAddons = []; // array lang, hindi Set
+var selectedDate = null;
+ 
+ 
+// Tinatawag ito kapag pinindot yung isang tier card
 function selectTier(key, el) {
   selectedTier = key;
-  document.querySelectorAll('.tier-card').forEach((c) => c.classList.remove('is-selected'));
-  el.classList.add('is-selected');
-  updateSummary();
-}
-
-function toggleAddon(key, el) {
-  if (selectedAddons.has(key)) {
-    selectedAddons.delete(key);
-    el.classList.remove('is-selected');
-  } else {
-    selectedAddons.add(key);
-    el.classList.add('is-selected');
+ 
+  // tanggalin muna yung "selected" style sa lahat ng tier card
+  var allTierCards = document.querySelectorAll(".tier-card");
+  for (var i = 0; i < allTierCards.length; i++) {
+    allTierCards[i].classList.remove("is-selected");
   }
+ 
+  // idagdag yung "selected" style sa pinindot lang
+  el.classList.add("is-selected");
+ 
   updateSummary();
 }
-
+ 
+ 
+// Tinatawag ito kapag pinindot yung isang add-on
+function toggleAddon(key, el) {
+  // check muna kung nasa array na yung key
+  var index = selectedAddons.indexOf(key);
+ 
+  if (index === -1) {
+    // wala pa sa listahan, idagdag
+    selectedAddons.push(key);
+    el.classList.add("is-selected");
+  } else {
+    // nasa listahan na, tanggalin
+    selectedAddons.splice(index, 1);
+    el.classList.remove("is-selected");
+  }
+ 
+  updateSummary();
+}
+ 
+ 
+// Tinatawag ito kapag pumili ng date sa calendar
 function selectDate(day, el) {
   selectedDate = day;
-  document.querySelectorAll('.calendar-day').forEach((d) => d.classList.remove('is-selected'));
-  if (el) el.classList.add('is-selected');
+ 
+  var allDays = document.querySelectorAll(".calendar-day");
+  for (var i = 0; i < allDays.length; i++) {
+    allDays[i].classList.remove("is-selected");
+  }
+ 
+  if (el) {
+    el.classList.add("is-selected");
+  }
+ 
   updateSummary();
 }
-
+ 
+ 
+// I-update yung summary box (yung nasa side na nagpapakita ng total)
 function updateSummary() {
-  const summaryEl = document.getElementById('booking-summary');
-  if (!summaryEl) return;
-
-  let total = 0;
-  let lines = '';
-
-  if (selectedTier) {
-    total += tierData[selectedTier].price;
-    lines += `<div class="summary-line"><span>${tierData[selectedTier].name}</span><span>₱${tierData[selectedTier].price.toLocaleString()}</span></div>`;
+  var summaryBox = document.getElementById("booking-summary");
+  if (!summaryBox) {
+    return;
   }
-
-  selectedAddons.forEach((key) => {
-    total += addonData[key].price;
-    lines += `<div class="summary-line"><span>${addonData[key].name}</span><span>+₱${addonData[key].price.toLocaleString()}</span></div>`;
-  });
-
-  summaryEl.innerHTML = lines || '<p class="text-muted">Pumili ng package para makita ang total.</p>';
-
-  const totalEl = document.getElementById('booking-total');
-  if (totalEl) totalEl.textContent = `₱${total.toLocaleString()}`;
+ 
+  var total = 0;
+  var htmlText = "";
+ 
+  // idagdag yung presyo ng napiling tier
+  if (selectedTier !== null) {
+    total = total + tierPrices[selectedTier];
+    htmlText = htmlText + '<div class="summary-line"><span>' + tierNames[selectedTier] + '</span><span>₱' + tierPrices[selectedTier].toLocaleString() + '</span></div>';
+  }
+ 
+  // idagdag yung presyo ng bawat napiling add-on
+  for (var i = 0; i < selectedAddons.length; i++) {
+    var addonKey = selectedAddons[i];
+    total = total + addonPrices[addonKey];
+    htmlText = htmlText + '<div class="summary-line"><span>' + addonNames[addonKey] + '</span><span>+₱' + addonPrices[addonKey].toLocaleString() + '</span></div>';
+  }
+ 
+  // kung wala pang napipili, magpakita ng message
+  if (htmlText === "") {
+    htmlText = '<p class="text-muted">Pumili ng package para makita ang total.</p>';
+  }
+ 
+  summaryBox.innerHTML = htmlText;
+ 
+  var totalBox = document.getElementById("booking-total");
+  if (totalBox) {
+    totalBox.textContent = "₱" + total.toLocaleString();
+  }
 }
-
+ 
+ 
+// Gumagawa ng calendar grid (halimbawa: August 2026)
 function renderCalendar(containerId, year, month) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const monthName = new Date(year, month, 1).toLocaleString('en-US', { month: 'long' });
-
-  let html = `
-    <div class="calendar-header">
-      <button type="button" class="calendar-nav">&lt;</button>
-      <span class="calendar-title">${monthName} ${year}</span>
-      <button type="button" class="calendar-nav">&gt;</button>
-    </div>
-    <div class="calendar-grid">
-      ${['S', 'M', 'T', 'W', 'TH', 'F', 'S'].map((d) => `<div class="calendar-dow">${d}</div>`).join('')}
-  `;
-
-  for (let i = 0; i < firstDay; i++) html += `<div class="calendar-day is-empty"></div>`;
-  for (let d = 1; d <= daysInMonth; d++) {
-    html += `<button type="button" class="calendar-day" onclick="selectDate(${d}, this)">${d}</button>`;
+  var container = document.getElementById(containerId);
+  if (!container) {
+    return;
   }
-
-  html += `</div>`;
-  el.innerHTML = html;
+ 
+  var firstDayOfMonth = new Date(year, month, 1).getDay();
+  var totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+  var monthName = new Date(year, month, 1).toLocaleString("en-US", { month: "long" });
+ 
+  var dayLabels = ["S", "M", "T", "W", "TH", "F", "S"];
+ 
+  var html = "";
+  html = html + '<div class="calendar-header">';
+  html = html + '<button type="button" class="calendar-nav">&lt;</button>';
+  html = html + '<span class="calendar-title">' + monthName + " " + year + "</span>";
+  html = html + '<button type="button" class="calendar-nav">&gt;</button>';
+  html = html + "</div>";
+ 
+  html = html + '<div class="calendar-grid">';
+ 
+  // header ng mga araw (S, M, T, W...)
+  for (var i = 0; i < dayLabels.length; i++) {
+    html = html + '<div class="calendar-dow">' + dayLabels[i] + "</div>";
+  }
+ 
+  // blangkong kahon bago magsimula yung araw 1
+  for (var j = 0; j < firstDayOfMonth; j++) {
+    html = html + '<div class="calendar-day is-empty"></div>';
+  }
+ 
+  // yung mga actual na araw, clickable
+  for (var day = 1; day <= totalDaysInMonth; day++) {
+    html = html + '<button type="button" class="calendar-day" onclick="selectDate(' + day + ', this)">' + day + "</button>";
+  }
+ 
+  html = html + "</div>";
+ 
+  container.innerHTML = html;
 }
-
-/* ---------- Confirm modal (dashboard.html) ---------- */
+ 
+ 
+// Buksan yung "Are you sure?" confirmation box
 function openConfirmModal(label) {
-  const modal = document.getElementById('confirm-modal');
-  const text = document.getElementById('confirm-modal-text');
-  if (!modal) return;
-  if (text) text.textContent = `Are you sure you want to cancel "${label}"?`;
-  modal.classList.add('is-open');
+  var modal = document.getElementById("confirm-modal");
+  var text = document.getElementById("confirm-modal-text");
+ 
+  if (!modal) {
+    return;
+  }
+ 
+  if (text) {
+    text.textContent = 'Are you sure you want to cancel "' + label + '"?';
+  }
+ 
+  modal.classList.add("is-open");
 }
-
+ 
+ 
+// Isara yung confirmation box
 function closeConfirmModal() {
-  const modal = document.getElementById('confirm-modal');
-  if (modal) modal.classList.remove('is-open');
+  var modal = document.getElementById("confirm-modal");
+  if (modal) {
+    modal.classList.remove("is-open");
+  }
 }
-
-/* ---------- Mobile nav toggle (optional, safe no-op if absent) ---------- */
-document.addEventListener('DOMContentLoaded', () => {
-  const toggle = document.getElementById('nav-toggle');
-  const nav = document.querySelector('.site-nav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', () => nav.classList.toggle('is-open'));
+ 
+ 
+// Para sa mobile menu (kung meron mang hamburger button)
+document.addEventListener("DOMContentLoaded", function () {
+  var toggleButton = document.getElementById("nav-toggle");
+  var nav = document.querySelector(".site-nav");
+ 
+  if (toggleButton && nav) {
+    toggleButton.addEventListener("click", function () {
+      nav.classList.toggle("is-open");
+    });
   }
 });
