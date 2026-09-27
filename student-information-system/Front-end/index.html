@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>M&E Lights and Sounds — Book Your Event</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .hero { padding: 72px 0 40px; text-align: center; }
+  .hero-pill {
+    display: inline-block; padding: 6px 16px; border-radius: 999px;
+    border: 1px solid var(--border-subtle); font-size: 12px; color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(36px, 6vw, 64px);
+    letter-spacing: 0.5px;
+    line-height: 1.05;
+    margin: 0 0 16px;
+  }
+  .hero h1 .accent {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero p { color: var(--text-muted); max-width: 520px; margin: 0 auto; font-size: 16px; }
+
+  .step-section { padding: 40px 0; border-top: 1px solid var(--border-subtle); }
+  .step-label { font-size: 12px; color: var(--text-faint); font-weight: 700; margin-bottom: 4px; }
+  .step-title { font-size: 22px; font-weight: 800; margin: 0 0 24px; }
+
+  .tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .tier-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+
+  .tier-card:hover { transform: translateY(-2px); }
+  .tier-card.is-selected { border-color: var(--violet); box-shadow: 0 0 0 1px var(--violet); }
+
+  .tier-tag {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px;
+    border-radius: 999px; background: var(--bg-surface-2); color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  .tier-name { font-size: 20px; font-weight: 800; margin: 0 0 4px; }
+  .tier-price { font-size: 28px; font-weight: 800; }
+  .tier-price small { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+  .tier-features { margin: 18px 0 0; padding: 0; list-style: none; }
+  .tier-features li {
+    font-size: 13px; color: var(--text-muted); padding: 6px 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .addon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .addon-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    cursor: pointer;
+    transition: border-color .15s ease;
+  }
+
+  .addon-card.is-selected { border-color: var(--violet); }
+  .addon-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .addon-price { font-size: 12px; color: var(--violet); font-weight: 600; }
+
+  .calendar-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+  }
+  .calendar-title { font-weight: 800; font-size: 16px; }
+  .calendar-nav {
+    background: var(--bg-surface-2); border: 1px solid var(--border-subtle); color: var(--text-primary);
+    width: 32px; height: 32px; border-radius: 50%; font-size: 14px;
+  }
+  .calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+  }
+  .calendar-dow { text-align: center; font-size: 11px; color: var(--text-faint); font-weight: 700; padding: 6px 0; }
+  .calendar-day {
+    aspect-ratio: 1; border-radius: var(--radius-sm); background: var(--bg-surface-2);
+    border: 1px solid transparent; color: var(--text-primary); font-size: 13px;
+  }
+  .calendar-day.is-empty { background: transparent; }
+  .calendar-day:not(.is-empty):hover { border-color: var(--text-faint); }
+  .calendar-day.is-selected { background: var(--gradient-primary); font-weight: 700; }
+
+  .booking-layout {
+    display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start;
+  }
+
+  .summary-card { position: sticky; top: 96px; padding: 24px; }
+  .summary-card h3 { margin: 0 0 16px; font-size: 15px; }
+  .summary-line {
+    display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted);
+    padding: 8px 0; border-bottom: 1px solid var(--border-subtle);
+  }
+  .summary-total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-subtle);
+  }
+  .summary-total span:first-child { font-size: 13px; color: var(--text-muted); }
+  .summary-total span:last-child { font-size: 22px; font-weight: 800; }
+
+  @media (max-width: 900px) {
+    .tier-grid, .addon-grid { grid-template-columns: 1fr 1fr; }
+    .booking-layout { grid-template-columns: 1fr; }
+    .summary-card { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <div class="brand-mark">M&E</div>
+      <div class="brand-name">M&E Lights <span>And Sounds</span></div>
+    </div>
+    <nav class="site-nav">
+      <ul>
+        <li><a href="index.html">Book</a></li>
+        <li><a href="dashboard.html">My bookings</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="login.html">Log in</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <span class="hero-pill">Booking opens instantly</span>
+    <h1>Pick a rig. <span class="accent">Lock a date.</span></h1>
+    <p>Three production tiers, one calendar. Choose your setup, grab an open date, and we'll hold it while you finalize the rest.</p>
+  </div>
+</section>
+
+<div class="container booking-layout">
+  <div>
+
+    <section class="step-section" style="border-top:none;">
+      <div class="step-label">STEP 1</div>
+      <h2 class="step-title">Choose your tier</h2>
+      <div class="tier-grid">
+
+        <div class="tier-card" onclick="selectTier('basic', this)">
+          <span class="tier-tag">For intimate gathering</span>
+          <p class="tier-name">Basic</p>
+          <p class="tier-price">₱3,500 <small>/ ₱250 per hour</small></p>
+          <ul class="tier-features">
+            <li>2 mid-high + 2 sub speakers</li>
+            <li>2 wireless microphones</li>
+            <li>4 LED PAR + 10 flat LED lights</li>
+            <li>2 power amplifiers, 2 DJ, DMX controller</li>
+          </ul>
+        </div>
+
+        <div class="tier-card" onclick="selectTier('classb', this)">
+          <span class="tier-tag" style="color:var(--violet);">Most booked tier</span>
+          <p class="tier-name">Class B</p>
+          <p class="tier-price">₱6,000 <small>/ ₱250 per hour</small></p>
+          <ul class="tier-features">
+            <li>4 mid-high + 4 sub speakers</li>
+            <li>2 wireless + 1 wired microphone</li>
+            <li>8 LED PAR + 12 flat LED lights</li>
+            <li>4 power amplifiers, 3 DJ, 2 DMX, moving head</li>
+          </ul>
+        </div>
+
+        <div class="tier-card" onclick="selectTier('classa', this)">
+          <span class="tier-tag" style="color:var(--amber);">Full production</span>
+          <p class="tier-name">Class A</p>
+          <p class="tier-price">₱8,000 <small>/ ₱250 per hour</small></p>
+          <ul class="tier-features">
+            <li>2 pairs dual + 6 sub speakers</li>
+            <li>2 wireless + 1 wired microphone</li>
+            <li>18 LED PAR + 15 flat LED lights</li>
+            <li>4 amps, 4 DJ, 3 DMX, moving heads, lasers</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="step-section">
+      <div class="step-label">STEP 2</div>
+      <h2 class="step-title">Add extras <span class="text-muted" style="font-weight:400; font-size:14px;">(optional)</span></h2>
+      <div class="addon-grid">
+        <div class="addon-card" onclick="toggleAddon('projector', this)">
+          <p class="addon-name">Projector with white screen</p>
+          <p class="addon-price">+₱1,000</p>
+        </div>
+        <div class="addon-card" onclick="toggleAddon('moving', this)">
+          <p class="addon-name">Moving head</p>
+          <p class="addon-price">+₱500 per pair</p>
+        </div>
+        <div class="addon-card" onclick="toggleAddon('smoke', this)">
+          <p class="addon-name">Smoke machine</p>
+          <p class="addon-price">+₱1,000</p>
+        </div>
+        <div class="addon-card" onclick="toggleAddon('bubble', this)">
+          <p class="addon-name">Bubble machine</p>
+          <p class="addon-price">+₱500</p>
+        </div>
+        <div class="addon-card" onclick="toggleAddon('mic', this)">
+          <p class="addon-name">Additional microphone</p>
+          <p class="addon-price">+₱500 per set</p>
+        </div>
+        <div class="addon-card" onclick="toggleAddon('lights', this)">
+          <p class="addon-name">Additional lights</p>
+          <p class="addon-price">+₱100 per piece</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="step-section">
+      <div class="step-label">STEP 3</div>
+      <h2 class="step-title">Pick an open date</h2>
+      <div class="card" style="padding:24px;">
+        <div id="booking-calendar"></div>
+      </div>
+    </section>
+
+    <section class="step-section">
+      <div class="step-label">STEP 4</div>
+      <h2 class="step-title">Your details</h2>
+      <div class="card" style="padding:24px;">
+        <div class="field-row">
+          <div class="field">
+            <label for="full-name">Full name</label>
+            <input id="full-name" type="text" placeholder="Juan Dela Cruz" />
+          </div>
+          <div class="field">
+            <label for="contact">Phone or email</label>
+            <input id="contact" type="text" placeholder="09123456789" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="event-type">Event type</label>
+            <input id="event-type" type="text" placeholder="Birthday, wedding, seminar..." />
+          </div>
+          <div class="field">
+            <label for="guests">Estimated guests</label>
+            <input id="guests" type="number" placeholder="26" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="venue">Venue / address</label>
+          <input id="venue" type="text" placeholder="Barangay hall, city, or venue name" />
+        </div>
+        <div class="field">
+          <label for="notes">Notes for the crew (optional)</label>
+          <textarea id="notes" rows="3" placeholder="Load-in time, program flow, special guest"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="alert('Reservation submitted! Confirmation will be sent to your contact info.')">Submit reservation</button>
+      </div>
+    </section>
+
+  </div>
+
+  <aside class="card summary-card">
+    <h3>Your booking</h3>
+    <div id="booking-summary"><p class="text-muted">Pumili ng package para makita ang total.</p></div>
+    <div class="summary-total">
+      <span>Estimated total</span>
+      <span id="booking-total">₱0</span>
+    </div>
+  </aside>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  renderCalendar('booking-calendar', 2026, 7); // August 2026
+</script>
+
+</body>
+</html>

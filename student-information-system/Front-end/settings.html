@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Settings — M&E Lights and Sounds</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .page-wrap { padding: 40px 0 80px; }
+  .settings-layout { display: grid; grid-template-columns: 220px 1fr; gap: 28px; }
+  .settings-nav { padding: 8px 0; }
+  .settings-nav .group-label {
+    font-size: 11px; font-weight: 700; color: var(--text-faint);
+    text-transform: uppercase; letter-spacing: .04em; padding: 14px 20px 6px;
+  }
+  .settings-nav a {
+    display: block; padding: 10px 20px; font-size: 14px; color: var(--text-muted); font-weight: 600;
+    border-left: 2px solid transparent;
+  }
+  .settings-nav a.is-active { color: var(--text-primary); border-left-color: var(--violet); background: var(--bg-surface-2); }
+  .settings-nav a.danger { color: #f87171; }
+
+  .profile-card { padding: 32px; }
+  .profile-card h2 { margin: 0 0 4px; font-size: 20px; }
+  .profile-card > p { margin: 0 0 24px; color: var(--text-muted); font-size: 13px; }
+
+  .avatar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .avatar {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--gradient-primary);
+    display: flex; align-items: center; justify-content: center; font-weight: 800;
+  }
+
+  .form-actions { display: flex; gap: 12px; margin-top: 8px; }
+
+  @media (max-width: 720px) {
+    .settings-layout { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <div class="brand-mark">M&E</div>
+      <div class="brand-name">M&E Lights <span>And Sounds</span></div>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="text-muted" style="font-size:13px;">&larr; Back to site</a>
+      <a href="login.html" style="font-size:13px; color:#f87171; font-weight:600;">Log out</a>
+    </div>
+  </div>
+</header>
+
+<div class="container page-wrap">
+  <div class="settings-layout">
+
+    <nav class="card settings-nav">
+      <div class="group-label">Account</div>
+      <a href="#" class="is-active">Profile</a>
+      <a href="#">Security</a>
+      <div class="group-label">Billing</div>
+      <a href="#">Billing history</a>
+      <a href="#">Payment methods</a>
+      <div class="group-label">Other</div>
+      <a href="#">Preferences</a>
+      <a href="login.html" class="danger">Log out</a>
+    </nav>
+
+    <div class="card profile-card">
+      <h2>Profile</h2>
+      <p>Update your personal details. This is what shows on your bookings and to your event coordinator.</p>
+
+      <div class="avatar-row">
+        <div class="avatar">JG</div>
+        <button class="btn btn-ghost btn-sm">Upload photo</button>
+        <button class="btn btn-ghost btn-sm">Remove</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="first-name">First name</label>
+          <input id="first-name" type="text" value="Juan" />
+        </div>
+        <div class="field">
+          <label for="last-name">Last name</label>
+          <input id="last-name" type="text" value="Dela Cruz" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" type="email" value="juandelacruz@gmail.com" />
+        </div>
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" type="tel" value="09123456789" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="notes">About / event notes</label>
+        <textarea id="notes" rows="2">Usually books for weddings and corporate events in Pampanga.</textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="alert('Changes saved!')">Save changes</button>
+        <button class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

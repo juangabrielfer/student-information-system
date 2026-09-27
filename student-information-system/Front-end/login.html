@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Log in — M&E Lights and Sounds</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .auth-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 32px; border-bottom: 1px solid var(--border-subtle);
+  }
+  .auth-wrap {
+    min-height: calc(100vh - 73px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  .auth-card { width: 100%; max-width: 400px; padding: 40px; }
+  .auth-card h1 { font-size: 24px; margin: 8px 0 8px; }
+  .auth-card p.lead { color: var(--text-muted); font-size: 14px; margin: 0 0 28px; }
+  .auth-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin: -8px 0 20px; }
+  .auth-meta label { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--text-faint); font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+  .btn-google {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 12px; border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle); background: var(--bg-surface-2); color: var(--text-primary);
+    font-weight: 600; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-header">
+  <div class="brand">
+    <div class="brand-mark">M&E</div>
+    <div class="brand-name">M&E Lights <span>And Sounds</span></div>
+  </div>
+  <a href="index.html" class="text-muted" style="font-size:13px;">&larr; Back to site</a>
+</div>
+
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <span class="eyebrow">Welcome back</span>
+    <h1>Log in to your account</h1>
+    <p class="lead">Pick up where you left off — check your booking status, message your event coordinator, or reserve your next date. New here? <a href="signup.html" style="color:var(--violet); font-weight:600;">Create an account.</a></p>
+
+    <form onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@gmail.com" required />
+      </div>
+      <div class="field" style="margin-bottom:8px;">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" required />
+      </div>
+      <div class="auth-meta">
+        <label><input type="checkbox" /> Remember me</label>
+        <a href="#" style="color:var(--text-muted);">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Log in &rarr;</button>
+    </form>
+
+    <div class="divider">Or continue with</div>
+    <button type="button" class="btn-google" onclick="window.location.href='dashboard.html'">
+      <span style="font-weight:800;">G</span> Continue with Google
+    </button>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Booking Details — M&E Lights and Sounds</title>
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .page-wrap { padding: 40px 0 80px; display: flex; justify-content: center; }
+  .details-card { width: 100%; max-width: 560px; padding: 32px; }
+  .details-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    padding: 20px 0; border-bottom: 1px solid var(--border-subtle); margin-bottom: 20px;
+  }
+  .details-grid div p:first-child { font-size: 12px; color: var(--text-faint); margin: 0 0 4px; }
+  .details-grid div p:last-child { font-size: 14px; font-weight: 700; margin: 0; }
+  table.package-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+  table.package-table th {
+    text-align: left; font-size: 12px; color: var(--text-faint); font-weight: 700;
+    padding: 0 0 10px; border-bottom: 1px solid var(--border-subtle);
+  }
+  table.package-table td {
+    padding: 14px 0; font-size: 14px; border-bottom: 1px solid var(--border-subtle);
+  }
+  table.package-table td:last-child, table.package-table th:last-child { text-align: right; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand">
+      <div class="brand-mark">M&E</div>
+      <div class="brand-name">M&E Lights <span>And Sounds</span></div>
+    </div>
+    <div class="header-actions">
+      <a href="dashboard.html" class="text-muted" style="font-size:13px;">&larr; Back to bookings</a>
+    </div>
+  </div>
+</header>
+
+<div class="container page-wrap">
+  <div class="card details-card">
+    <h2 style="margin:0 0 20px; font-size:20px;">Booking details</h2>
+
+    <div class="details-grid">
+      <div>
+        <p>Client</p>
+        <p>Juan Dela Cruz</p>
+      </div>
+      <div>
+        <p>Event date</p>
+        <p>Sat, Aug 29, 2026</p>
+      </div>
+      <div>
+        <p>Venue</p>
+        <p>Grandview Hall, Urdaneta</p>
+      </div>
+      <div>
+        <p>Load-in time</p>
+        <p>3:00 PM</p>
+      </div>
+      <div>
+        <p>Contact</p>
+        <p>0917 234 5678</p>
+      </div>
+    </div>
+
+    <table class="package-table">
+      <thead>
+        <tr><th>Package &amp; add-ons</th><th>Qty</th><th>Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Class A</td><td>1</td><td>₱8,000</td></tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-ghost btn-block" style="margin-bottom:12px;" onclick="window.location.href='index.html'">Edit package</button>
+    <button class="btn btn-primary btn-block" onclick="alert('Booking confirmed!')">Book the package</button>
+  </div>
+</div>
+
+</body>
+</html>
